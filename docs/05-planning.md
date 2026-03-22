@@ -1,5 +1,3 @@
----
-
 # Compliance Brain - Development Planning
 
 > Design Thinking methodology with 3-developer parallel tracks. Journey-centric sprints working backward from customer experience.
