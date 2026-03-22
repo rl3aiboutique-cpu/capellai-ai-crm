@@ -11,7 +11,7 @@
 | 02 | [DDD Architecture](./02-ddd-architecture.md) | Hybrid DDD: full DDD (AML), service layer (client/compliance), simple CRUD (rest) |
 | 03 | [Code Architecture](./03-code-architecture.md) | Tech stack, project structure, patterns (DDD/SOLID/DI), coding standards |
 | 04 | [Infrastructure](./04-infrastructure.md) | Docker + Supabase deployment, CI/CD, security, monitoring, disaster recovery |
-| 05 | [Planning](./05-planning.md) | Phased delivery, sprint plan, 4-developer parallel tracks |
+| 05 | [Planning](./05-planning.md) | Design Thinking methodology, journey-centric sprints, 3-developer parallel tracks |
 | 06 | [Data Model](./06-data-model.md) | Core database schema, multi-tenancy, relationships |
 | 07 | [Architecture Diagrams](./07-architecture-diagrams.md) | C4 diagrams, deployment, feature map, async architecture |
 | 08 | [ADRs & Tech Debt](./08-adrs-and-tech-debt.md) | 12 Architecture Decision Records + 20 known tech debt items |

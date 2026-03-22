@@ -283,23 +283,20 @@ CPU-bound work (PDF generation) offloaded to thread pool via asyncio.to_thread()
 ## What Each Developer Builds
 
 ```
-SENIOR 1 (Track A): Foundation + Infrastructure
+TRACK A (Senior — Infrastructure + Cross-cutting)
   Shared kernel, Identity, Audit middleware, Workflow engine,
-  Document Factory, Dashboard views, Regulatory Radar,
-  Scheduled jobs, Deployment, Data migration
+  Document Factory, Compliance registers, Dashboard views,
+  Notification service, Regulatory Radar, Scheduled jobs,
+  Deployment, Data migration
 
-SENIOR 2 (Track B): Domain Expert
+TRACK B (Senior — Domain Core + Integration)
   Client service layer, AML full DDD (core product),
-  Screening workflow, Risk scoring, Compliance service layer,
-  Light tracking, Post-licence handoff saga
+  Screening workflow, Risk scoring, Compliance domain,
+  Light tracking, Post-licence handoff saga,
+  Agent framework, Integration testing
 
-JUNIOR (Track C): Frontend
-  All 15 screens from wireframes, reusable components,
-  Data tables, forms, dashboards, Kanban board
-
-DEV 4 (Track D): Full-stack Flex + AML Co-owner
-  AML API endpoints (co-own with Senior 2),
-  Notification service, Email templates,
-  Compliance API endpoints, Integration tests,
-  Scheduled jobs, Deployment pipeline
+TRACK C (Junior — Frontend + Data, PRs reviewed by both seniors)
+  All ~15 screens from wireframes, reusable components,
+  Data tables, forms, dashboards, Kanban board,
+  Data migration UI, responsive design, component tests
 ```

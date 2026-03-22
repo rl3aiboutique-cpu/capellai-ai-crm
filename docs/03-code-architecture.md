@@ -728,7 +728,7 @@ jobs:
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Monorepo vs polyrepo | **Monorepo** | Simplifies shared types, CI, and deployment for a small team (4 devs) |
+| Monorepo vs polyrepo | **Monorepo** | Simplifies shared types, CI, and deployment for a small team (3 devs) |
 | Modular monolith vs microservices | **Modular monolith** | Bounded contexts as Python packages, not separate services. Extract later if needed. |
 | ORM vs raw SQL | **SQLAlchemy 2.0** | Domain mapping, Unit of Work, mature ecosystem. Raw SQL for complex reads. |
 | Frontend rendering | **Client-side rendering (`'use client'`)** | Internal tool, < 10 users, no SEO. Supabase Auth works client-side. Eliminates SSR/hydration complexity. |

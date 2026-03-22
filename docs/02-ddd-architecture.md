@@ -22,7 +22,7 @@ Not all bounded contexts need full DDD ceremony. We use three levels based on do
 - **Service Layer**: `AsyncSession` used directly in `service.py`. No repository interfaces. No commands/queries classes (just service methods).
 - **Simple CRUD**: `AsyncSession` used directly in `routes.py`. No service layer. No repository.
 
-**Why hybrid?** Full DDD for everything adds ~40% more code for ~60% of contexts that are essentially CRUD. With < 10 users and 4 devs (1 junior), the overhead slows delivery without adding safety. Full DDD is reserved for AML where regulatory invariants ARE the product value.
+**Why hybrid?** Full DDD for everything adds ~40% more code for ~60% of contexts that are essentially CRUD. With < 10 users and 3 devs (1 junior), the overhead slows delivery without adding safety. Full DDD is reserved for AML where regulatory invariants ARE the product value.
 
 ---
 
