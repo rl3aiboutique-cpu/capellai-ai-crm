@@ -259,7 +259,7 @@ body{font-family:'DM Sans',sans-serif;background:#060a13;color:#e2e8f0;overflow-
   <h1 class="hero-title">9 Sprints to<br><em>Go Live</em></h1>
   <p class="hero-sub">Click any screen preview to explore stories, developer assignments, and infrastructure. A journey-centric walkthrough for the team.</p>
   <div class="hero-cta">
-    <button class="hero-btn hero-btn-primary" onclick="scrollTo(1)">Start the Journey &#8594;</button>
+    <button class="hero-btn hero-btn-primary" onclick="goToSprint(1)">Start the Journey &#8594;</button>
   </div>
   <div class="scroll-hint"><div class="scroll-arrow"></div>Scroll to explore</div>
 </section>
@@ -296,7 +296,7 @@ body{font-family:'DM Sans',sans-serif;background:#060a13;color:#e2e8f0;overflow-
 <section class="finale">
   <h2 class="finale-title">Compliance Brain<br><span style="color:#10b981">is Live.</span></h2>
   <p class="finale-sub">9 sprints. 48 stories. 3 developers. One platform that transforms compliance operations.</p>
-  <div style="margin-top:36px"><button class="hero-btn hero-btn-primary" onclick="scrollTo(1)">&#8593; Back to Sprint 1</button></div>
+  <div style="margin-top:36px"><button class="hero-btn hero-btn-primary" onclick="goToSprint(1)">&#8593; Back to Sprint 1</button></div>
 </section>
 
 <script>
@@ -745,7 +745,7 @@ tlNames.forEach((n,i) => {
   d.className = 'tn-item';
   d.dataset.sprint = i+1;
   d.innerHTML = `<span class="tn-num">${i+1}</span>${n}`;
-  d.onclick = () => scrollTo(i+1);
+  d.onclick = () => goToSprint(i+1);
   tlInner.appendChild(d);
 });
 
@@ -844,7 +844,7 @@ function switchTab(tab) {
 }
 
 /* ====== SCROLL / NAV ====== */
-function scrollTo(n) {
+function goToSprint(n) {
   const el = document.getElementById('sprint-' + n);
   if(el) el.scrollIntoView({behavior:'smooth'});
 }
@@ -893,8 +893,8 @@ document.addEventListener('keydown', e => {
   if(document.getElementById('detailPanel').classList.contains('open')) return;
   const active = document.querySelector('.tn-item.active');
   const num = active ? parseInt(active.dataset.sprint) : 0;
-  if((e.key === 'ArrowRight' || e.key === 'ArrowDown') && num < 9) scrollTo(num+1);
-  if((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && num > 1) scrollTo(num-1);
+  if((e.key === 'ArrowRight' || e.key === 'ArrowDown') && num < 9) goToSprint(num+1);
+  if((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && num > 1) goToSprint(num-1);
 });
 </script>
 </body>

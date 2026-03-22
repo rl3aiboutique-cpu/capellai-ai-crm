@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance Brain — Sprint Journey | RL3 AI Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rl3-black: #0a0a0b;
+  --rl3-white: #ffffff;
+  --rl3-accent: #c8b88a;
+  --rl3-accent-dim: #c8b88a33;
+  --rl3-gray: #7a7a7a;
+  --rl3-dark-gray: #1a1a1b;
+  --rl3-mid-gray: #2a2a2b;
+  --rl3-light-bg: #f5f5f5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Instrument Sans',system-ui,sans-serif;background:#0a0a0b;color:var(--rl3-white);cursor:crosshair;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ====== GRAIN OVERLAY ====== */
+.grain-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0.02;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E")}
+
+/* ====== HERO ====== */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:60px 24px;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,var(--rl3-accent-dim),transparent 70%)}
+.hero-logo{margin-bottom:48px;opacity:0;animation:fadeUp .8s ease .1s both}
+.hero-logo svg{width:160px;height:auto}
+.hero-label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:24px;opacity:0;animation:fadeUp .8s ease .2s both}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(40px,7vw,80px);font-weight:700;letter-spacing:-0.02em;line-height:1.05;color:var(--rl3-white);margin-bottom:20px;opacity:0;animation:fadeUp .8s ease .3s both}
+.hero-title .accent{color:var(--rl3-accent)}
+.hero-sub{font-size:clamp(15px,1.8vw,18px);color:var(--rl3-gray);max-width:560px;line-height:1.7;margin-bottom:48px;opacity:0;animation:fadeUp .8s ease .4s both}
+.hero-cta{display:flex;gap:16px;opacity:0;animation:fadeUp .8s ease .5s both}
+.btn{height:48px;padding:0 28px;border-radius:0;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.02em;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s;position:relative;overflow:hidden}
+.btn-primary{background:var(--rl3-accent);color:var(--rl3-black)}
+.btn-primary:hover{background:var(--rl3-white);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--rl3-gray);border:1px solid var(--rl3-mid-gray)}
+.btn-ghost:hover{border-color:var(--rl3-accent);color:var(--rl3-accent)}
+.scroll-line{position:absolute;bottom:40px;width:1px;height:48px;background:var(--rl3-accent);opacity:.3;animation:pulseLine 2s infinite}
+
+/* ====== TIMELINE NAV ====== */
+.timeline-nav{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(10,10,11,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--rl3-mid-gray);transform:translateY(-100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.timeline-nav.visible{transform:translateY(0)}
+.timeline-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;height:52px;gap:2px;overflow-x:auto;padding:0 20px;-webkit-overflow-scrolling:touch}
+.timeline-inner::-webkit-scrollbar{display:none}
+.tl-brand{flex-shrink:0;margin-right:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--rl3-white);letter-spacing:-0.02em;display:flex;align-items:center;gap:0}
+.tl-brand .tl-3{color:var(--rl3-accent)}
+.tn-item{flex-shrink:0;padding:6px 10px;font-family:'Space Mono',monospace;font-size:10px;font-weight:400;cursor:pointer;transition:all .2s;color:var(--rl3-gray);white-space:nowrap;position:relative;letter-spacing:0.02em}
+.tn-item:hover{color:var(--rl3-white)}
+.tn-item.active{color:var(--rl3-accent)}
+.tn-item.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:16px;height:1px;background:var(--rl3-accent)}
+.tn-item.completed{color:var(--rl3-white);opacity:.5}
+
+/* ====== SPRINT SECTIONS ====== */
+.sprint-section{min-height:100vh;padding:100px 24px 60px;position:relative;scroll-margin-top:52px}
+.sprint-section::before{content:'';position:absolute;left:0;top:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--rl3-mid-gray) 20%,var(--rl3-mid-gray) 80%,transparent)}
+.sprint-container{max-width:1200px;margin:0 auto}
+
+.sprint-header{margin-bottom:40px;opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.sprint-header.visible{opacity:1;transform:translateY(0)}
+.sprint-label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.sprint-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--rl3-accent),transparent 60%);opacity:.3}
+.sprint-milestone{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,48px);font-weight:700;letter-spacing:-0.02em;line-height:1.1;color:var(--rl3-white);margin-bottom:16px}
+.sprint-milestone .accent{color:var(--rl3-accent)}
+.sprint-desc{font-size:15px;color:var(--rl3-gray);max-width:600px;line-height:1.7}
+
+/* Stories bar */
+.stories-bar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:28px;opacity:0;transform:translateY(20px);transition:all .6s .2s cubic-bezier(.16,1,.3,1)}
+.stories-bar.visible{opacity:1;transform:translateY(0)}
+.story-tag{padding:3px 9px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.02em;background:var(--rl3-accent-dim);color:var(--rl3-accent);border:1px solid rgba(200,184,138,.15)}
+
+/* ====== SCREEN CARDS ====== */
+.screens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:20px;opacity:0;transform:translateY(30px);transition:all .8s .3s cubic-bezier(.16,1,.3,1)}
+.screens-grid.visible{opacity:1;transform:translateY(0)}
+.screen-card{background:var(--rl3-dark-gray);border:1px solid var(--rl3-mid-gray);overflow:hidden;cursor:pointer;position:relative;transition:all .3s}
+.screen-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--rl3-accent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.screen-card:hover{border-color:var(--rl3-accent)}
+.screen-card:hover::before{transform:scaleX(1)}
+.screen-card-header{padding:8px 12px;background:var(--rl3-black);border-bottom:1px solid var(--rl3-mid-gray);font-family:'Space Mono',monospace;font-size:10px;color:var(--rl3-gray);letter-spacing:0.02em;display:flex;align-items:center;justify-content:space-between}
+.screen-card-header::after{content:'EXPAND';font-size:8px;letter-spacing:0.1em;color:var(--rl3-accent);opacity:0;transition:opacity .2s}
+.screen-card:hover .screen-card-header::after{opacity:1}
+.screen-card-body{padding:0}
+
+/* ====== DETAIL MODAL ====== */
+.detail-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,10,11,.85);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .35s}
+.detail-overlay.open{opacity:1;pointer-events:all}
+.detail-panel{position:fixed;inset:12px;z-index:1001;background:var(--rl3-black);border:1px solid var(--rl3-mid-gray);display:grid;grid-template-columns:55% 45%;overflow:hidden;transform:scale(.97);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.detail-panel.open{transform:scale(1);opacity:1;pointer-events:all}
+.detail-close{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;background:var(--rl3-dark-gray);border:1px solid var(--rl3-mid-gray);color:var(--rl3-gray);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Space Mono',monospace}
+.detail-close:hover{background:var(--rl3-mid-gray);color:var(--rl3-accent)}
+.detail-left{background:var(--rl3-dark-gray);display:flex;flex-direction:column;overflow:hidden}
+.detail-left-header{padding:14px 20px;background:var(--rl3-black);border-bottom:1px solid var(--rl3-mid-gray);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--rl3-white);letter-spacing:-0.01em}
+.detail-left-body{flex:1;padding:20px;overflow:auto;display:flex;align-items:start;justify-content:center}
+.detail-right{display:flex;flex-direction:column;border-left:1px solid var(--rl3-mid-gray);overflow:hidden}
+.detail-tabs{display:flex;background:var(--rl3-black);border-bottom:1px solid var(--rl3-mid-gray);flex-shrink:0}
+.detail-tab{flex:1;padding:12px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--rl3-gray);cursor:pointer;text-align:center;border-bottom:1px solid transparent;transition:all .2s}
+.detail-tab:hover{color:var(--rl3-white)}
+.detail-tab.active{color:var(--rl3-accent);border-bottom-color:var(--rl3-accent)}
+.detail-tab-content{flex:1;overflow-y:auto;padding:20px}
+.detail-tab-pane{display:none}
+.detail-tab-pane.active{display:block}
+
+/* Track groups */
+.track-group{margin-bottom:24px}
+.track-group-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rl3-mid-gray)}
+.track-group-dot{width:8px;height:8px;flex-shrink:0}
+.track-group-name{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--rl3-white)}
+.track-group-role{font-family:'Space Mono',monospace;font-size:9px;color:var(--rl3-gray);margin-left:auto;letter-spacing:0.02em}
+.story-item{background:var(--rl3-dark-gray);border:1px solid var(--rl3-mid-gray);padding:12px 14px;margin-bottom:8px;transition:border-color .2s}
+.story-item:hover{border-color:var(--rl3-accent)}
+.story-item-id{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--rl3-accent);margin-bottom:4px;letter-spacing:0.02em}
+.story-item-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--rl3-white);margin-bottom:4px}
+.story-item-desc{font-size:12px;color:var(--rl3-gray);line-height:1.6}
+.story-item-criteria{margin-top:8px;padding-top:8px;border-top:1px solid var(--rl3-mid-gray)}
+.story-item-criteria li{font-family:'Space Mono',monospace;font-size:9px;color:var(--rl3-gray);padding:2px 0;list-style:none}
+.story-item-criteria li::before{content:'[ ] ';color:var(--rl3-accent)}
+
+/* ====== TRACKS ROW ====== */
+.tracks-row{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap;opacity:0;transform:translateY(20px);transition:all .6s .5s cubic-bezier(.16,1,.3,1)}
+.tracks-row.visible{opacity:1;transform:translateY(0)}
+.track-chip{padding:5px 11px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.02em;display:flex;align-items:center;gap:6px;border:1px solid}
+.track-chip.track-a{background:rgba(200,184,138,.06);color:var(--rl3-accent);border-color:rgba(200,184,138,.15)}
+.track-chip.track-b{background:rgba(255,255,255,.03);color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.1)}
+.track-chip.track-c{background:rgba(122,122,122,.06);color:var(--rl3-gray);border-color:rgba(122,122,122,.15)}
+.track-dot{width:5px;height:5px;flex-shrink:0}
+.track-a .track-dot{background:var(--rl3-accent)}
+.track-b .track-dot{background:var(--rl3-white)}
+.track-c .track-dot{background:var(--rl3-gray)}
+
+/* Decision gate */
+.gate-card{border:1px solid rgba(200,184,138,.2);padding:16px 20px;margin-top:28px;position:relative;opacity:0;transform:translateY(20px);transition:all .6s .4s cubic-bezier(.16,1,.3,1)}
+.gate-card.visible{opacity:1;transform:translateY(0)}
+.gate-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--rl3-accent)}
+.gate-label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:8px}
+.gate-text{font-size:13px;color:var(--rl3-gray);line-height:1.7}
+.gate-critical{border-color:rgba(239,68,68,.3)}
+.gate-critical::before{background:#ef4444}
+.gate-critical .gate-label{color:#ef4444}
+.gate-final{border-color:rgba(200,184,138,.4)}
+.gate-final .gate-label{font-size:0.75rem;color:var(--rl3-accent)}
+.gate-final .gate-text{color:var(--rl3-white);font-size:14px}
+
+/* ====== MINI WIREFRAME STYLES ====== */
+.mini-app{display:flex;height:240px;font-size:10px;background:#f5f6f8;overflow:hidden}
+.mini-sidebar{width:52px;background:#0f172a;padding:6px 3px;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
+.mini-sidebar .ms-logo{font-size:5px;color:#fff;font-weight:700;text-align:center;padding:3px 0 5px;border-bottom:1px solid #1e293b;margin-bottom:3px}
+.mini-sidebar .ms-section{font-size:4px;color:#475569;text-transform:uppercase;letter-spacing:.4px;padding:2px 3px 0}
+.mini-sidebar .ms-item{padding:2px 4px;color:#64748b;font-size:5px;border-radius:2px;white-space:nowrap;overflow:hidden}
+.mini-sidebar .ms-item.active{background:#1e3a5f;color:#fff;border-left:2px solid #3b82f6;padding-left:2px}
+.mini-sidebar .ms-item.locked{opacity:.3}
+.mini-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.mini-topbar{height:16px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 6px;flex-shrink:0}
+.mini-topbar .mt-breadcrumb{font-size:5px;color:#6b7280;font-family:'Instrument Sans',sans-serif}
+.mini-topbar .mt-avatar{width:8px;height:8px;border-radius:50%;background:#3b82f6}
+.mini-content{flex:1;padding:6px;overflow:hidden;font-family:'Instrument Sans',sans-serif}
+.mini-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:5px}
+.mini-kpi{background:#fff;border:1px solid #e5e7eb;border-radius:2px;padding:3px;text-align:center}
+.mini-kpi-val{font-size:9px;font-weight:700;color:#1a1a2e}
+.mini-kpi-label{font-size:4px;color:#6b7280}
+.mini-table{background:#fff;border:1px solid #e5e7eb;border-radius:2px;overflow:hidden}
+.mini-table-header{display:grid;background:#f9fafb;padding:2px 3px;font-size:4px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb}
+.mini-table-row{display:grid;padding:2px 3px;font-size:5px;color:#374151;border-bottom:1px solid #f3f4f6}
+.mini-badge{display:inline-block;padding:0 3px;border-radius:4px;font-size:4px;font-weight:600}
+.mini-badge-green{background:#d1fae5;color:#065f46}
+.mini-badge-blue{background:#dbeafe;color:#1e40af}
+.mini-badge-orange{background:#ffedd5;color:#9a3412}
+.mini-badge-red{background:#fee2e2;color:#991b1b}
+.mini-badge-yellow{background:#fef3c7;color:#92400e}
+.mini-stage-tracker{display:flex;align-items:center;gap:2px;background:#fff;border:1px solid #e5e7eb;border-radius:2px;padding:3px 4px;margin-bottom:5px}
+.mini-stage-dot{width:7px;height:7px;border-radius:50%;font-size:3px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.mini-stage-dot.done{background:#10b981}
+.mini-stage-dot.current{background:#2563eb}
+.mini-stage-dot.future{background:#e5e7eb;color:#6b7280}
+.mini-stage-line{flex:1;height:1px;background:#e5e7eb}
+.mini-stage-line.done{background:#10b981}
+.mini-card{background:#fff;border:1px solid #e5e7eb;border-radius:2px;padding:3px;margin-bottom:3px}
+.mini-card-title{font-size:5px;font-weight:600;color:#1a1a2e;margin-bottom:1px}
+.mini-btn{display:inline-block;padding:1px 5px;border-radius:2px;font-size:4px;font-weight:600;background:#2563eb;color:#fff}
+.mini-kanban{display:flex;gap:2px;flex:1}
+.mini-kanban-col{flex:1;background:#f9fafb;border-radius:2px;padding:2px}
+.mini-kanban-header{font-size:4px;font-weight:700;color:#374151;margin-bottom:2px;display:flex;justify-content:space-between}
+.mini-kanban-card{background:#fff;border:1px solid #e5e7eb;border-radius:2px;padding:2px;margin-bottom:1px;font-size:4px}
+.mini-auth-overlay{position:absolute;inset:0;background:rgba(6,10,19,.85);display:flex;align-items:center;justify-content:center;z-index:5;backdrop-filter:blur(3px)}
+.mini-auth-box{background:#fff;border-radius:5px;padding:10px;width:110px;text-align:center}
+.mini-auth-icon{width:18px;height:18px;margin:0 auto 5px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:4px}
+.mini-auth-title{font-size:6px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.mini-auth-sub{font-size:4px;color:#6b7280;margin-bottom:4px}
+.mini-auth-input{width:100%;height:8px;border:1px solid #d1d5db;border-radius:2px;margin-bottom:2px;background:#f9fafb}
+.mini-auth-btn{width:100%;height:10px;background:#2563eb;border-radius:2px;color:#fff;font-size:4px;font-weight:600;display:flex;align-items:center;justify-content:center}
+
+/* Large preview */
+.large-app{display:flex;width:100%;max-width:700px;font-size:12px;background:#f5f6f8;overflow:hidden;border:1px solid var(--rl3-mid-gray);min-height:420px}
+.large-app .mini-sidebar{width:140px;padding:10px 6px;gap:3px}
+.large-app .ms-logo{font-size:11px !important;padding:8px 0 10px !important}
+.large-app .ms-section{font-size:8px !important;padding:6px 6px 2px !important}
+.large-app .ms-item{font-size:10px !important;padding:4px 8px !important}
+.large-app .ms-item.active{padding-left:6px !important}
+.large-app .mini-topbar{height:32px;padding:0 12px}
+.large-app .mt-breadcrumb{font-size:10px !important}
+.large-app .mt-avatar{width:16px !important;height:16px !important}
+.large-app .mini-content{padding:12px}
+.large-app .mini-kpi-row{gap:6px;margin-bottom:8px}
+.large-app .mini-kpi{padding:6px}
+.large-app .mini-kpi-val{font-size:16px}
+.large-app .mini-kpi-label{font-size:8px}
+.large-app .mini-table-header{font-size:8px;padding:4px 6px}
+.large-app .mini-table-row{font-size:9px;padding:4px 6px}
+.large-app .mini-badge{font-size:7px;padding:1px 5px}
+.large-app .mini-stage-tracker{padding:6px 8px;margin-bottom:8px}
+.large-app .mini-stage-dot{width:14px;height:14px;font-size:7px}
+.large-app .mini-card{padding:6px;margin-bottom:4px}
+.large-app .mini-card-title{font-size:9px;margin-bottom:3px}
+.large-app .mini-btn{font-size:8px;padding:3px 8px}
+.large-app .mini-kanban-col{padding:4px}
+.large-app .mini-kanban-header{font-size:8px;margin-bottom:4px}
+.large-app .mini-kanban-card{font-size:8px;padding:4px}
+.large-app .mini-auth-box{width:200px;padding:20px}
+.large-app .mini-auth-icon{width:32px;height:32px;margin-bottom:10px;border-radius:6px}
+.large-app .mini-auth-title{font-size:12px;margin-bottom:4px}
+.large-app .mini-auth-sub{font-size:9px;margin-bottom:8px}
+.large-app .mini-auth-input{height:16px;margin-bottom:4px}
+.large-app .mini-auth-btn{height:20px;font-size:9px}
+
+/* Finale */
+.finale{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;text-align:center;position:relative}
+.finale::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 50%,var(--rl3-accent-dim),transparent)}
+.finale-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4.5vw,52px);font-weight:700;letter-spacing:-0.02em;margin-bottom:16px}
+.finale-title .accent{color:var(--rl3-accent)}
+.finale-sub{font-size:15px;color:var(--rl3-gray);max-width:420px;line-height:1.7}
+.finale-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--rl3-mid-gray);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-gray)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseLine{0%,100%{opacity:.15}50%{opacity:.5}}
+
+@media(max-width:768px){
+  .detail-panel{grid-template-columns:1fr;inset:8px}
+  .detail-left{max-height:45vh}
+  .screens-grid{grid-template-columns:1fr}
+  .mini-sidebar,.large-app .mini-sidebar{display:none}
+  .large-app{min-height:280px}
+  .tracks-row{flex-direction:column;gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="grain-overlay"></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+      <text x="10" y="42" font-family="Space Grotesk" font-size="48" font-weight="700" fill="#ffffff">RL<tspan fill="#c8b88a">3</tspan></text>
+      <text x="10" y="56" font-family="Space Mono" font-size="8" letter-spacing="0.3em" fill="#7a7a7a">AI AGENCY</text>
+    </svg>
+  </div>
+  <div class="hero-label">01 — Compliance Brain Platform</div>
+  <h1 class="hero-title">9 Sprints to<br><span class="accent">Go Live</span></h1>
+  <p class="hero-sub">Each sprint delivers visible value. Each Decision Gate validates direction. Observe, act, iterate until the platform is operational.</p>
+  <div class="hero-cta">
+    <button class="btn btn-primary" onclick="goToSprint(1)">Start the journey &#8594;</button>
+    <button class="btn btn-ghost" onclick="goToSprint(1)">View timeline</button>
+  </div>
+  <div class="scroll-line"></div>
+</section>
+
+<!-- TIMELINE NAV -->
+<nav class="timeline-nav" id="timelineNav">
+  <div class="timeline-inner">
+    <div class="tl-brand">RL<span class="tl-3">3</span></div>
+    <div id="tlInner" style="display:contents"></div>
+  </div>
+</nav>
+
+<!-- DETAIL MODAL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" onclick="closeDetail()">&times;</button>
+  <div class="detail-left">
+    <div class="detail-left-header" id="detailScreenName"></div>
+    <div class="detail-left-body" id="detailPreview"></div>
+  </div>
+  <div class="detail-right">
+    <div class="detail-tabs">
+      <div class="detail-tab active" data-tab="stories" onclick="switchTab('stories')">Stories & Tracks</div>
+      <div class="detail-tab" data-tab="infra" onclick="switchTab('infra')">Infrastructure</div>
+    </div>
+    <div class="detail-tab-content">
+      <div class="detail-tab-pane active" id="paneStories"></div>
+      <div class="detail-tab-pane" id="paneInfra"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPRINTS -->
+<div id="sprintsContainer"></div>
+
+<!-- FINALE -->
+<section class="finale">
+  <h2 class="finale-title">Compliance Brain<br><span class="accent">is Live.</span></h2>
+  <p class="finale-sub">9 sprints. 48 stories. 3 developers. Each iteration brings us closer to the optimal outcome.</p>
+  <div style="margin-top:36px"><button class="btn btn-primary" onclick="goToSprint(1)">&#8593; Back to Sprint 1</button></div>
+  <div class="finale-footer">RL3 AI AGENCY</div>
+</section>
+
+<script>
+/* ======== SPRINT DATA ======== */
+const SPRINTS=[{id:1,weeks:'1-2',milestone:'I can <span class="accent">log in</span> and see the app',desc:'The foundation is laid. Developers authenticate, the app shell appears with navigation, the database runs with seed data, and CI is green.',stories:['US-1.1','US-1.3'],tracks:{a:'Project scaffold + Docker + CI + Supabase + Shared kernel',b:'Data models (Client, Person) + Migrations + Seed data + Test infra',c:'Next.js scaffold + Auth pages (Login/MFA) + App layout + Reusable components'},gate:'Auth works, app shell visible, sidebar rendered. Database with seed data. CI pipeline green.',screens:[{name:'Login Screen',html:'<div class="mini-app" style="position:relative"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">DASHB</div><div class="ms-item locked">Dashboard</div><div class="ms-section">AML</div><div class="ms-item locked">Clients</div><div class="ms-item locked">Onboarding</div></div><div class="mini-main" style="filter:blur(2px);opacity:.4"><div class="mini-topbar"><span class="mt-breadcrumb">Loading...</span><div class="mt-avatar"></div></div><div class="mini-content"></div></div><div class="mini-auth-overlay"><div class="mini-auth-box"><div class="mini-auth-icon"></div><div class="mini-auth-title">Compliance Brain</div><div class="mini-auth-sub">Sign in to continue</div><div class="mini-auth-input"></div><div class="mini-auth-input"></div><div style="height:2px"></div><div class="mini-auth-btn">Sign In</div></div></div></div>',storyDetails:[{id:'US-1.1',title:'Auth with MFA',track:'A+C',desc:'Login email/password, MFA (TOTP), session management, password reset, lockout.',criteria:['Login email + password','MFA required for all users','Session timeout configurable','Password reset flow']},{id:'US-1.3',title:'Multi-Tenant Isolation',track:'A',desc:'Every record carries TenantId. Row-level security at database level.',criteria:['TenantId on every record','RLS enforced in PostgreSQL','Cross-tenant queries impossible']}]},{name:'App Shell (Empty State)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">DASHB</div><div class="ms-item active">Dashboard</div><div class="ms-item locked">Team</div><div class="ms-section">AML</div><div class="ms-item locked">Clients</div><div class="ms-item locked">Onboarding</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">Dashboard</span><div class="mt-avatar"></div></div><div class="mini-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8"><div style="font-size:18px;margin-bottom:4px">&#x1F680;</div><div style="font-size:7px;font-weight:600;color:#374151">Compliance Brain</div><div style="font-size:5px;color:#94a3b8">Features unlock with each sprint</div></div></div></div>',storyDetails:[{id:'US-1.1',title:'App Shell + Base Components',track:'C',desc:'Next.js 15 + Tailwind + shadcn/ui. Sidebar, topbar, reusable components.',criteria:['Next.js 15 + React 19 + TypeScript','Tailwind CSS 4 + shadcn/ui','Sidebar with full navigation','DataTable, Form, Badge, StatusBadge']}]}]},
+{id:2,weeks:'3-4',milestone:'I can see and <span class="accent">manage my clients</span>',desc:'First real value. Founders see their client portfolio, browse, search, filter, drill into details. UBO structures visible. Documents uploaded.',stories:['US-1.2','US-1.4','US-2.1','US-2.2','US-2.3','US-2.4','US-2.5','US-2.6'],tracks:{a:'IAM (User+Role+Tenant) + Supabase Auth + RBAC middleware + Audit trail + Multi-tenant RLS',b:'Client lifecycle + CRUD API + UBO management + Corporate ownership + Doc upload + Search API',c:'Client list (wireframe 02) + Client detail (wireframe 15) + UBO display + Search UI'},gate:'Founders see clients, details with UBOs, upload documents, search and filter. All audit-logged. Tenant isolation verified.',screens:[{name:'Client List (wireframe 02)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AML</div><div class="ms-item active">Clients</div><div class="ms-item locked">Onboarding</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">AML &rsaquo; <b>Clients</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><div><div style="font-size:8px;font-weight:700;color:#1a1a2e">Clients</div><div style="font-size:4px;color:#6b7280">47 total</div></div><div class="mini-btn">+ New</div></div><div class="mini-table"><div class="mini-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Client</span><span>Type</span><span>Status</span><span>Risk</span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">Al Rashid Holdings</span><span>Corp</span><span><span class="mini-badge mini-badge-blue">Onboard</span></span><span><span class="mini-badge mini-badge-red">VH</span></span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">Noor Capital</span><span>Corp</span><span><span class="mini-badge mini-badge-blue">Onboard</span></span><span><span class="mini-badge mini-badge-orange">High</span></span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">Emirates Strategic</span><span>Corp</span><span><span class="mini-badge mini-badge-green">Active</span></span><span><span class="mini-badge mini-badge-yellow">Med</span></span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">Sarah Al Maktoum</span><span>Indiv</span><span><span class="mini-badge mini-badge-green">Active</span></span><span><span class="mini-badge mini-badge-green">Low</span></span></div></div></div></div></div>',storyDetails:[{id:'US-2.1',title:'Client Lifecycle Management',track:'B',desc:'States: PROSPECT to ONBOARDING to ACTIVE to UNDER_REVIEW to SUSPENDED to EXITED.',criteria:['6 states with transition rules','Authorized role required','Every transition audit-logged']},{id:'US-2.3',title:'UBO Management',track:'B',desc:'UBOs as shared Person entities. PEP auto-escalates to HIGH risk.',criteria:['UBO as shared Person entity','Threshold configurable (25%/10%)','PEP flag auto-triggers HIGH risk']},{id:'US-1.4',title:'Immutable Audit Trail',track:'A',desc:'Every action recorded. Append-only. Actor, timestamp, before/after.',criteria:['Append-only (no update/delete)','Actor, timestamp, action, before/after','Exportable CSV/PDF','Retention: 6 years minimum']}]},{name:'Client Detail (wireframe 15)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AML</div><div class="ms-item">Clients</div><div class="ms-item active">Detail</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">Clients &rsaquo; <b>Al Rashid</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="font-size:8px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Al Rashid Holdings</div><div class="mini-kpi-row"><div class="mini-kpi"><div class="mini-kpi-val" style="color:#ef4444">VH</div><div class="mini-kpi-label">Risk</div></div><div class="mini-kpi"><div class="mini-kpi-val">3</div><div class="mini-kpi-label">UBOs</div></div><div class="mini-kpi"><div class="mini-kpi-val">12</div><div class="mini-kpi-label">Docs</div></div><div class="mini-kpi"><div class="mini-kpi-val">1</div><div class="mini-kpi-label">Case</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px"><div class="mini-card"><div class="mini-card-title">UBO Structure</div><div style="font-size:4px;color:#6b7280"><div>M. Al Rashid 45%</div><div>F. Al Rashid 30%</div><div>Horizon Trust 25%</div></div></div><div class="mini-card"><div class="mini-card-title">Documents</div><div style="font-size:4px;color:#6b7280"><div>Trade Licence.pdf</div><div>Passport.pdf</div><div>Board Resolution.docx</div></div></div></div></div></div></div>',storyDetails:[{id:'US-2.4',title:'Document Management',track:'B+C',desc:'Upload, version, track documents per client.',criteria:['Upload PDF, DOCX, XLSX, images','Full version history','Expiry date tracking','Alerts: 60/30/7 days']},{id:'US-2.5',title:'Corporate Ownership Structure',track:'B',desc:'Nested ownership chains up to 10+ levels.',criteria:['Entity can own entity','Depth 10+ layers','Visual ownership diagram','Must reach natural persons']}]}]},
+{id:3,weeks:'5-6',milestone:'I can <span class="accent">start onboarding</span> a client',desc:'The core workflow activates. Create onboarding cases, progress through 8 stages. Founder and team dashboards with live KPIs.',stories:['US-3.1','US-3.2','US-10.1','US-10.2','US-12.1','US-12.2'],tracks:{a:'Workflow engine (Task aggregate) + Approvals + SLA tracking + Dashboard views',b:'OnboardingCase aggregate (Full DDD) + 8-stage state machine + APIs + Auto-checklist',c:'Onboarding page (03) + Stage tracker + Founder dashboard (01) + Team dashboard (09) + KPI cards'},gate:'Users create onboarding cases and progress through stages. Founder dashboard with KPIs. Team dashboard with "My Tasks".',screens:[{name:'Onboarding Case (wireframe 03)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AML</div><div class="ms-item">Clients</div><div class="ms-item active">Onboarding</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">Onboarding &rsaquo; <b>CASE-0047</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="font-size:8px;font-weight:700;color:#1a1a2e;margin-bottom:3px">Al Rashid - Onboarding</div><div class="mini-stage-tracker"><div class="mini-stage-dot done">&#10003;</div><div class="mini-stage-line done"></div><div class="mini-stage-dot done">&#10003;</div><div class="mini-stage-line done"></div><div class="mini-stage-dot current">3</div><div class="mini-stage-line"></div><div class="mini-stage-dot future">4</div><div class="mini-stage-line"></div><div class="mini-stage-dot future">5</div><div class="mini-stage-line"></div><div class="mini-stage-dot future">6</div></div><div class="mini-card"><div class="mini-card-title">Checklist</div><div style="font-size:4px;color:#065f46">&#9745; Passport &#9745; Trade Licence</div><div style="font-size:4px;color:#991b1b">&#9744; Board Resolution &#9744; Bank Stmt</div></div></div></div></div>',storyDetails:[{id:'US-3.1',title:'Onboarding Case Lifecycle',track:'B',desc:'8-stage state machine. Entry/exit criteria. SLA 5-10 business days.',criteria:['8 stages with entry/exit criteria','One active case per client (default)','SLA: 5-10 business days','Stage skipping for low-risk']},{id:'US-10.1',title:'Task Management',track:'A',desc:'Tasks linked to cases, entities, policies. Assignment, due dates, priorities.',criteria:['Tasks linked to cases/entities/policies','Assignment with due dates','Priority levels + status tracking']},{id:'US-12.1',title:'Founder Dashboard',track:'A+C',desc:'Strategic overview: open cases, high-risk, deadlines, overdue, KPI trends.',criteria:['Open cases by type and stage','High-risk highlighted','Upcoming deadlines','KPI cards with trends']}]},{name:'Founder Dashboard (wireframe 01)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">DASHB</div><div class="ms-item active">Founder</div><div class="ms-item">Team</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb"><b>Founder Dashboard</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div class="mini-kpi-row"><div class="mini-kpi"><div class="mini-kpi-val">12</div><div class="mini-kpi-label">Open Cases</div></div><div class="mini-kpi"><div class="mini-kpi-val" style="color:#ef4444">3</div><div class="mini-kpi-label">High Risk</div></div><div class="mini-kpi"><div class="mini-kpi-val" style="color:#f59e0b">5</div><div class="mini-kpi-label">Overdue</div></div><div class="mini-kpi"><div class="mini-kpi-val">47</div><div class="mini-kpi-label">Clients</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px"><div class="mini-card"><div class="mini-card-title">Cases by Stage</div><div style="font-size:4px;margin-top:2px"><div style="display:flex;align-items:center;gap:2px"><div style="width:40%;height:5px;background:#dbeafe;border-radius:1px"></div>Intake (4)</div><div style="display:flex;align-items:center;gap:2px"><div style="width:25%;height:5px;background:#93c5fd;border-radius:1px"></div>Screening (3)</div><div style="display:flex;align-items:center;gap:2px"><div style="width:10%;height:5px;background:#3b82f6;border-radius:1px"></div>Approval (1)</div></div></div><div class="mini-card"><div class="mini-card-title">Deadlines</div><div style="font-size:4px;color:#6b7280"><div><span style="color:#ef4444">&#9679;</span> Al Rashid SLA Mar 12</div><div><span style="color:#f59e0b">&#9679;</span> Noor Capital Mar 14</div></div></div></div></div></div></div>',storyDetails:[{id:'US-12.2',title:'Team Dashboard',track:'A+C',desc:'Personal dashboard: assigned tasks, deadlines, pending approvals.',criteria:['My assigned tasks','Upcoming deadlines','Pending approvals','Case status updates']}]}]},
+{id:4,weeks:'7-8',milestone:'I can <span class="accent">screen clients</span> and score risk',desc:'The AML engine comes alive. Upload screening CSVs, triage hits, false positives with rationale, escalate true matches. Risk scoring with pluggable factors.',stories:['US-3.3','US-3.4','US-3.5','US-3.14','US-10.3'],tracks:{a:'Notification service (Resend) + Email templates + Reminder engine + pg_cron',b:'Risk scoring engine (pluggable) + ScreeningCase aggregate + Hit management + FP workflow',c:'Screening hub page (04) + Hit disposition UI + Risk score display'},gate:'Upload screening CSV, triage hits, risk score with full factor breakdown. Email reminders for overdue tasks.',screens:[{name:'Screening Hub (wireframe 04)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AML</div><div class="ms-item">Clients</div><div class="ms-item active">Screening</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">AML &rsaquo; <b>Screening</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><div style="font-size:8px;font-weight:700;color:#1a1a2e">Screening Hub</div><div class="mini-btn">Upload CSV</div></div><div class="mini-kpi-row" style="grid-template-columns:repeat(3,1fr)"><div class="mini-kpi"><div class="mini-kpi-val" style="color:#f59e0b">7</div><div class="mini-kpi-label">Pending</div></div><div class="mini-kpi"><div class="mini-kpi-val" style="color:#10b981">23</div><div class="mini-kpi-label">False Pos</div></div><div class="mini-kpi"><div class="mini-kpi-val" style="color:#ef4444">2</div><div class="mini-kpi-label">True Match</div></div></div><div class="mini-table"><div class="mini-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Subject</span><span>List</span><span>Score</span><span>Status</span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">M. Al Rashid</span><span>PEP</span><span>92%</span><span><span class="mini-badge mini-badge-orange">Pending</span></span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">Noor Capital</span><span>OFAC</span><span>87%</span><span><span class="mini-badge mini-badge-red">True</span></span></div></div></div></div></div>',storyDetails:[{id:'US-3.4',title:'Screening Hub',track:'B',desc:'Unified console. Phase 1: manual CSV upload. Lists: UAE, UN, HMT, OFAC, EU + PEP.',criteria:['CSV upload and parse','Lists: UAE, UN, HMT, OFAC, EU, PEP','Match threshold >=85% human review']},{id:'US-3.5',title:'Hit Management',track:'B',desc:'Triage: FALSE_POSITIVE (rationale 3-5 sentences), TRUE_MATCH (stop onboarding).',criteria:['False positive: rationale 3-5 sentences + CO sign-off','Sanctions hits: founder sign-off','True match: stop onboarding']},{id:'US-3.3',title:'Risk Scoring Engine',track:'B',desc:'Pluggable factors: jurisdiction, PEP, structure, SoW/SoF. Output: Low/Med/High/Unacceptable.',criteria:['Pluggable factors','Different models per ClientType','Full rationale documented','AI agent drafts, human confirms']}]}]},
+{id:5,weeks:'9-10',milestone:'I can complete onboarding <span class="accent">fully</span>',desc:'The moment of truth. A client goes from PROSPECT to ACTIVE. Documents auto-generated from templates. Due diligence complete. The 70% time-saving claim must be believable.',stories:['US-3.6','US-3.7','US-3.8','US-3.10','US-3.13','US-9.1','US-9.2','US-9.3'],tracks:{a:'Document Factory + Template management + DOCX/PDF generation + Supabase Storage + Versioning',b:'DD workflow + SoW/SoF + Approval routing (risk-tier) + Risk override + Onboarding to Active saga',c:'Document factory UI (25) + Approval flow UI + DD checklist UI'},gate:'Full cycle: PROSPECT to ACTIVE. Documents auto-generated. Validates the 70% time-saving claim.',gateCritical:true,screens:[{name:'Document Factory (wireframe 25)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">CROSS</div><div class="ms-item active">Doc Factory</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb"><b>Document Factory</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="font-size:8px;font-weight:700;color:#1a1a2e;margin-bottom:5px">Document Factory</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:5px"><div class="mini-card" style="text-align:center"><div style="font-size:12px">&#128196;</div><div style="font-size:5px;font-weight:600">DD Checklist</div><div class="mini-btn" style="margin-top:2px">DOCX</div></div><div class="mini-card" style="text-align:center"><div style="font-size:12px">&#128203;</div><div style="font-size:5px;font-weight:600">Risk Matrix</div><div class="mini-btn" style="margin-top:2px">PDF</div></div><div class="mini-card" style="text-align:center"><div style="font-size:12px">&#128221;</div><div style="font-size:5px;font-weight:600">Engagement</div><div class="mini-btn" style="margin-top:2px">DOCX</div></div></div><div class="mini-table"><div class="mini-table-header" style="grid-template-columns:2fr 1fr 1fr"><span>Document</span><span>Format</span><span>Ver</span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr"><span>DD Checklist</span><span>DOCX</span><span>v1.2</span></div><div class="mini-table-row" style="grid-template-columns:2fr 1fr 1fr"><span>Risk Matrix</span><span>PDF</span><span>v1.0</span></div></div></div></div></div>',storyDetails:[{id:'US-9.1',title:'Template Management',track:'A',desc:'DOCX/PPTX templates with merge fields. Version control. Admin-only updates.',criteria:['DOCX/PPTX with merge fields','Version control','Admin-only updates']},{id:'US-3.13',title:'Onboarding to Active Transition',track:'B',desc:'OnboardingApproved event: Client to ACTIVE, registers created, re-screening activated.',criteria:['Client status to ACTIVE','Compliance registers created','Re-screening schedule activated','Full audit trail']}]}]},
+{id:6,weeks:'11-12',milestone:'I can run <span class="accent">compliance operations</span>',desc:'Policy library with version control. 18 register types. Incident management with escalation. Training records.',stories:['US-4.1','US-4.2','US-4.3','US-4.4','US-4.5'],tracks:{a:'Compliance registers (18 tipos) + Policy library + Approval workflow + Training records',b:'Incident management (5-stage) + Register auto-update + Escalation rules',c:'Policy editor (10-11) + Register tabs (12) + Incident page (13) + Training UI'},gate:'Policy library with approval workflow. 18 register types. Incidents managed. Training tracked.',screens:[{name:'Policies & Registers (wireframes 10-12)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">COMPLIANCE</div><div class="ms-item active">Policies</div><div class="ms-item">Registers</div><div class="ms-item">Incidents</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">Compliance &rsaquo; <b>Policies</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="font-size:8px;font-weight:700;color:#1a1a2e;margin-bottom:3px">Policy Library</div><div class="mini-table"><div class="mini-table-header" style="grid-template-columns:3fr 1fr 1fr"><span>Policy</span><span>Ver</span><span>Status</span></div><div class="mini-table-row" style="grid-template-columns:3fr 1fr 1fr"><span style="font-weight:600">AML/CFT Policy</span><span>v2.1</span><span><span class="mini-badge mini-badge-green">Published</span></span></div><div class="mini-table-row" style="grid-template-columns:3fr 1fr 1fr"><span style="font-weight:600">Sanctions Policy</span><span>v1.3</span><span><span class="mini-badge mini-badge-blue">Review</span></span></div><div class="mini-table-row" style="grid-template-columns:3fr 1fr 1fr"><span style="font-weight:600">Data Protection</span><span>v1.0</span><span><span class="mini-badge mini-badge-yellow">Draft</span></span></div></div></div></div></div>',storyDetails:[{id:'US-4.1',title:'Policy Library',track:'A',desc:'Version-controlled policies. Review triggers: regulatory change, annual, audit.',criteria:['Version major.minor','Full amendment history','Automated review reminders']},{id:'US-4.4',title:'Incident Management',track:'B',desc:'5-stage workflow. CRITICAL requires immediate notification.',criteria:['Severity: Low/Med/High/Critical','CRITICAL: notification before close','Notification SLA: 24-72h']}]}]},
+{id:7,weeks:'13-14',milestone:'I can <span class="accent">track everything</span>',desc:'Auth pipeline as Kanban. Entity register with traffic lights. Regulatory changes logged. Global search. Audit trail browsable.',stories:['US-14.1','US-14.2','US-14.3','US-5.1','US-12.4'],tracks:{a:'Regulatory Radar (weekly scan) + Scheduled jobs (4) + Error handling + Logging',b:'Light auth case tracking + Light entity register + Post-licence handoff saga',c:'Auth Kanban (05) + Entity register (20) + Audit trail (26) + Global search'},gate:'Auth cases in Kanban. Entity register with traffic lights. Regulatory changes logged. Global search works. Audit trail exportable.',screens:[{name:'Auth Pipeline Kanban (wireframe 05)',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AUTH</div><div class="ms-item active">Pipeline</div><div class="ms-section">ENTITIES</div><div class="ms-item">Register</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">Auth &rsaquo; <b>Pipeline</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="font-size:8px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Applications Pipeline</div><div class="mini-kanban"><div class="mini-kanban-col"><div class="mini-kanban-header"><span>Engagement</span><span style="background:#e5e7eb;padding:0 3px;border-radius:3px">2</span></div><div class="mini-kanban-card"><div style="font-weight:600">Alpha Fund</div><div style="color:#6b7280">DFSA 3C</div></div><div class="mini-kanban-card"><div style="font-weight:600">Beta VASP</div><div style="color:#6b7280">VARA</div></div></div><div class="mini-kanban-col"><div class="mini-kanban-header"><span>Drafting</span><span style="background:#e5e7eb;padding:0 3px;border-radius:3px">1</span></div><div class="mini-kanban-card"><div style="font-weight:600">Gamma</div><div style="color:#6b7280">ADGM</div></div></div><div class="mini-kanban-col"><div class="mini-kanban-header"><span>RFI</span><span style="background:#fef3c7;padding:0 3px;border-radius:3px;color:#92400e">1</span></div><div class="mini-kanban-card" style="border-left:2px solid #f59e0b"><div style="font-weight:600">Epsilon</div><div style="color:#6b7280">DFSA 2</div></div></div></div></div></div></div>',storyDetails:[{id:'US-14.1',title:'Auth Case Tracking (Light)',track:'B',desc:'Track aplicaciones regulatorias por stages. Kanban board.',criteria:['Create/edit auth case records','Track 9 stages','Kanban board view','Stage transition con audit trail']},{id:'US-5.1',title:'Regulatory Radar (Basic)',track:'A',desc:'Weekly scan de fuentes UAE. Change log estructurado.',criteria:['DFSA, FSRA, UAE CB, VARA, DIFC, ADGM','FATF updates baseline','Weekly + ad-hoc manual scan','Approval manual antes de publicar']}]}]},
+{id:8,weeks:'15-16',milestone:'The system <span class="accent">runs autonomously</span>',desc:'Data migrated from Excel. AI agent drafts risk scores. Daily re-screening runs. Document expiry alerts fire. Minimal human intervention needed.',stories:['US-13.1','US-13.3','US-11.1','US-11.2','US-3.9','US-2.8','US-3.11','US-10.4'],tracks:{a:'Excel import (clients) + Template import + Migration scripts + Deployment pipeline',b:'Agent framework + Risk scoring agent (Claude API) + Daily re-screening + Doc expiry + SLA queries',c:'Import wizard UI + Regulatory change log (16) + AI draft review UI + Responsive polish'},gate:'~30 clients imported. AI drafts risk scores. Daily re-screening. Doc expiry alerts 60/30/7. SLA visible.',screens:[{name:'AI Agent: Risk Score Draft',html:'<div class="mini-app"><div class="mini-sidebar"><div class="ms-logo">CB</div><div class="ms-section">AML</div><div class="ms-item active">Onboarding</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb">AI Agent &rsaquo; <b>Risk Draft</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:3px;padding:3px 5px;font-size:5px;color:#5b21b6;margin-bottom:5px"><b>AI Draft</b> Generated by Claude. Human confirmation required.</div><div style="display:flex;gap:3px"><div class="mini-card" style="flex:1;text-align:center"><div style="font-size:14px;font-weight:700;color:#f59e0b">HIGH</div><div style="font-size:4px;color:#6b7280">Confidence: 87%</div></div><div class="mini-card" style="flex:2"><div class="mini-card-title">AI Rationale</div><div style="font-size:4px;color:#6b7280;line-height:1.3">Complex ownership, jurisdiction risk, PEP exposure. SoW incomplete. Recommend Enhanced DD.</div></div></div><div style="display:flex;gap:3px;margin-top:4px"><div class="mini-btn" style="background:#10b981">Confirm</div><div class="mini-btn" style="background:#f59e0b">Override</div><div class="mini-btn" style="background:#6b7280">Re-run</div></div></div></div></div>',storyDetails:[{id:'US-11.1',title:'Agent Framework',track:'B',desc:'All agent actions require human approval. Identity in audit trail.',criteria:['Human approval required (Phase 1)','Agent identity in audit trail','Accuracy metrics tracked','Outputs are "drafts" until confirmed']},{id:'US-11.2',title:'Risk Scoring Agent',track:'B',desc:'Claude API applies risk matrix, output with rationale. Human confirms.',criteria:['Agent applies risk matrix','Structured score with rationale','Human reviews and confirms','Confidence score displayed']},{id:'US-13.1',title:'Client Data Import',track:'A',desc:'Import ~30 clients from Excel/CSV. Field mapping, validation, dry-run.',criteria:['Import from Excel/CSV','Field mapping UI','Validation + error reporting','Dry-run before commit']}]}]},
+{id:9,weeks:'17-18',milestone:'Platform is <span class="accent">ready to go live</span>',desc:'Polish, test, secure, deploy. Parallel run alongside legacy processes. Security audit clean. Performance verified. Stakeholder sign-off.',stories:['US-13.4'],tracks:{a:'Parallel run + Go-live prep (rollback plan, SOPs) + Security review + Monitoring (Sentry)',b:'Bug fixes + Performance tuning + Security review + E2E smoke test',c:'Accessibility + Component testing (Vitest) + UI polish + Cross-browser'},gate:'All 48 P0 stories pass. Data migrated. Parallel run successful. Security clean. p95 < 2s. Sign-off: Isahaq + Sagheer.',gateFinal:true,screens:[{name:'Full Platform: All Features',html:'<div class="mini-app"><div class="mini-sidebar" style="font-size:4px"><div class="ms-logo">CB</div><div class="ms-section">DASHB</div><div class="ms-item active">Founder</div><div class="ms-item">Team</div><div class="ms-section">COMPLIANCE</div><div class="ms-item">Policies</div><div class="ms-item">Registers</div><div class="ms-item">Incidents</div><div class="ms-section">AML</div><div class="ms-item">Clients</div><div class="ms-item">Onboarding</div><div class="ms-item">Screening</div><div class="ms-section">AUTH</div><div class="ms-item">Pipeline</div><div class="ms-section">ENTITIES</div><div class="ms-item">Register</div><div class="ms-section">CROSS</div><div class="ms-item">Doc Factory</div><div class="ms-item">Audit Trail</div></div><div class="mini-main"><div class="mini-topbar"><span class="mt-breadcrumb"><b>Founder Dashboard</b></span><div class="mt-avatar"></div></div><div class="mini-content"><div class="mini-kpi-row"><div class="mini-kpi"><div class="mini-kpi-val" style="color:#10b981">47</div><div class="mini-kpi-label">Clients</div></div><div class="mini-kpi"><div class="mini-kpi-val">8</div><div class="mini-kpi-label">Onboard</div></div><div class="mini-kpi"><div class="mini-kpi-val" style="color:#10b981">0</div><div class="mini-kpi-label">Overdue</div></div><div class="mini-kpi"><div class="mini-kpi-val">17</div><div class="mini-kpi-label">Entities</div></div></div><div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:3px;padding:5px;font-size:5px;color:#065f46;text-align:center"><div style="font-weight:700;font-size:7px">READY FOR GO-LIVE</div><div>48 P0 stories | Security passed | Parallel run complete</div></div></div></div></div>',storyDetails:[{id:'US-13.4',title:'Parallel Run Support',track:'A+B+C',desc:'2-4 weeks alongside legacy processes. Soft launch with founders.',criteria:['Platform runs alongside legacy','Soft launch: Isahaq/Sagheer + 1-2 users','Export all data (rollback)','2 training sessions','Quick-start SOPs']}]}]}];
+
+/* ======== RENDER ======== */
+const container=document.getElementById('sprintsContainer');
+const tlInner=document.getElementById('tlInner');
+const tlNames=['Login','Clientes','Onboarding','Screening','E2E','Compliance','Tracking','AI+Migracion','Go-Live'];
+tlNames.forEach((n,i)=>{const d=document.createElement('div');d.className='tn-item';d.dataset.sprint=i+1;d.textContent=`0${i+1} ${n}`;d.onclick=()=>goToSprint(i+1);tlInner.appendChild(d)});
+
+SPRINTS.forEach(s=>{
+  const sec=document.createElement('section');
+  sec.className='sprint-section';sec.id=`sprint-${s.id}`;
+  const gateClass=s.gateCritical?'gate-card gate-critical':s.gateFinal?'gate-card gate-final':'gate-card';
+  const gatePre=s.gateCritical?'CRITICAL ':s.gateFinal?'FINAL ':''
+  sec.innerHTML=`<div class="sprint-container">
+    <div class="sprint-header" data-anim><div class="sprint-label">0${s.id} — Sprint ${s.id} / Weeks ${s.weeks}</div>
+    <h2 class="sprint-milestone">&ldquo;${s.milestone}&rdquo;</h2>
+    <p class="sprint-desc">${s.desc}</p></div>
+    <div class="stories-bar" data-anim>${s.stories.map(st=>`<span class="story-tag">${st}</span>`).join('')}</div>
+    <div class="screens-grid" data-anim>${s.screens.map((sc,si)=>`<div class="screen-card" onclick="openDetail(${s.id-1},${si})"><div class="screen-card-header">${sc.name}</div><div class="screen-card-body">${sc.html}</div></div>`).join('')}</div>
+    <div class="tracks-row" data-anim>
+      <span class="track-chip track-a"><span class="track-dot"></span>A: ${s.tracks.a}</span>
+      <span class="track-chip track-b"><span class="track-dot"></span>B: ${s.tracks.b}</span>
+      <span class="track-chip track-c"><span class="track-dot"></span>C: ${s.tracks.c}</span>
+    </div>
+    <div class="${gateClass}" data-anim><div class="gate-label">${gatePre}Decision Gate ${s.id}</div><div class="gate-text">${s.gate}</div></div>
+  </div>`;
+  container.appendChild(sec);
+});
+
+/* ======== DETAIL MODAL ======== */
+function openDetail(si,sci){
+  const s=SPRINTS[si],sc=s.screens[sci];
+  document.getElementById('detailScreenName').textContent=`0${s.id} — ${sc.name}`;
+  document.getElementById('detailPreview').innerHTML=`<div class="large-app">${sc.html}</div>`;
+  const pane=document.getElementById('paneStories');
+  const groups={A:[],B:[],C:[]};
+  sc.storyDetails.forEach(sd=>{sd.track.split('+').forEach(t=>{if(groups[t])groups[t].push(sd)})});
+  const meta={A:{name:'Track A',role:'Infra + Cross-cutting',color:'var(--rl3-accent)'},B:{name:'Track B',role:'Domain Core + Integration',color:'var(--rl3-white)'},C:{name:'Track C',role:'Frontend + Data',color:'var(--rl3-gray)'}};
+  let h='';
+  ['A','B','C'].forEach(t=>{if(!groups[t].length)return;const m=meta[t];
+    h+=`<div class="track-group"><div class="track-group-header"><div class="track-group-dot" style="background:${m.color}"></div><div class="track-group-name">${m.name}</div><div class="track-group-role">${m.role}</div></div>
+    ${groups[t].map(sd=>`<div class="story-item"><div class="story-item-id">${sd.id}</div><div class="story-item-title">${sd.title}</div><div class="story-item-desc">${sd.desc}</div>
+    ${sd.criteria?`<div class="story-item-criteria"><ul>${sd.criteria.map(c=>`<li>${c}</li>`).join('')}</ul></div>`:''}</div>`).join('')}</div>`;
+  });
+  pane.innerHTML=h;
+  document.getElementById('paneInfra').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;text-align:center;padding:40px 20px">
+    <div style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:16px">02 — Infrastructure</div>
+    <div style="font-size:15px;font-weight:600;color:var(--rl3-white);margin-bottom:8px">Under Construction</div>
+    <div style="font-size:12px;color:var(--rl3-gray);max-width:280px;line-height:1.6">Interactive infrastructure diagrams per sprint are being developed. See docs/04-infrastructure.md for current architecture.</div></div>`;
+  switchTab('stories');
+  document.getElementById('detailOverlay').classList.add('open');
+  document.getElementById('detailPanel').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDetail(){document.getElementById('detailOverlay').classList.remove('open');document.getElementById('detailPanel').classList.remove('open');document.body.style.overflow=''}
+function switchTab(tab){document.querySelectorAll('.detail-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));document.querySelectorAll('.detail-tab-pane').forEach(p=>p.classList.toggle('active',p.id==='pane'+tab.charAt(0).toUpperCase()+tab.slice(1)))}
+
+/* ======== NAV ======== */
+function goToSprint(n){const el=document.getElementById('sprint-'+n);if(el)el.scrollIntoView({behavior:'smooth'})}
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.12});
+document.querySelectorAll('[data-anim]').forEach(el=>obs.observe(el));
+const nav=document.getElementById('timelineNav');
+new IntersectionObserver(([e])=>{nav.classList.toggle('visible',!e.isIntersecting)},{threshold:0}).observe(document.getElementById('hero'));
+const navItems=document.querySelectorAll('.tn-item');
+document.querySelectorAll('.sprint-section').forEach(s=>{new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const num=x.target.id.replace('sprint-','');navItems.forEach(n=>{n.classList.remove('active');if(n.dataset.sprint===num)n.classList.add('active');if(parseInt(n.dataset.sprint)<parseInt(num))n.classList.add('completed');else n.classList.remove('completed')})}})},{threshold:.3}).observe(s)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();return}if(document.getElementById('detailPanel').classList.contains('open'))return;const a=document.querySelector('.tn-item.active');const n=a?parseInt(a.dataset.sprint):0;if((e.key==='ArrowRight'||e.key==='ArrowDown')&&n<9)goToSprint(n+1);if((e.key==='ArrowLeft'||e.key==='ArrowUp')&&n>1)goToSprint(n-1)});
+</script>
+</body>
+</html>
