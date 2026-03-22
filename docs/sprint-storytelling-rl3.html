@@ -70,7 +70,49 @@ body{font-family:'Instrument Sans',system-ui,sans-serif;background:#0a0a0b;color
 /* Stories bar */
 .stories-bar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:28px;opacity:0;transform:translateY(20px);transition:all .6s .2s cubic-bezier(.16,1,.3,1)}
 .stories-bar.visible{opacity:1;transform:translateY(0)}
-.story-tag{padding:3px 9px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.02em;background:var(--rl3-accent-dim);color:var(--rl3-accent);border:1px solid rgba(200,184,138,.15)}
+.story-tag{padding:3px 9px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.02em;background:var(--rl3-accent-dim);color:var(--rl3-accent);border:1px solid rgba(200,184,138,.15);cursor:pointer;transition:all .2s;position:relative}
+.story-tag:hover{background:rgba(200,184,138,.2);border-color:var(--rl3-accent)}
+
+/* Story popup */
+.story-popup{position:fixed;z-index:950;width:380px;max-height:70vh;background:var(--rl3-dark-gray);border:1px solid var(--rl3-accent);padding:0;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 16px 48px rgba(0,0,0,.6)}
+.story-popup.open{opacity:1;pointer-events:all}
+.story-popup-header{padding:12px 16px;background:var(--rl3-black);border-bottom:1px solid var(--rl3-mid-gray);display:flex;justify-content:space-between;align-items:center}
+.story-popup-id{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--rl3-accent)}
+.story-popup-close{width:24px;height:24px;background:none;border:1px solid var(--rl3-mid-gray);color:var(--rl3-gray);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace}
+.story-popup-close:hover{border-color:var(--rl3-accent);color:var(--rl3-accent)}
+.story-popup-body{padding:16px;overflow-y:auto;max-height:calc(70vh - 48px)}
+.story-popup-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--rl3-white);margin-bottom:12px}
+.story-popup-narrative{font-size:13px;color:var(--rl3-gray);line-height:1.7;margin-bottom:16px}
+.story-popup-narrative strong{color:var(--rl3-white)}
+.story-popup-criteria-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:8px}
+.story-popup-criteria li{font-size:12px;color:var(--rl3-gray);padding:3px 0;list-style:none;border-bottom:1px solid rgba(42,42,43,.5)}
+.story-popup-criteria li::before{content:'[ ] ';font-family:'Space Mono',monospace;color:var(--rl3-accent);font-size:10px}
+.story-popup-sprint{margin-top:12px;padding:8px 12px;background:var(--rl3-black);font-family:'Space Mono',monospace;font-size:10px;color:var(--rl3-gray)}
+.story-popup-sprint span{color:var(--rl3-accent)}
+
+/* ====== TIMELINE SECTION ====== */
+.timeline-section{padding:80px 24px;position:relative}
+.timeline-section::before{content:'';position:absolute;left:0;top:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--rl3-mid-gray) 20%,var(--rl3-mid-gray) 80%,transparent)}
+.timeline-container{max-width:1200px;margin:0 auto}
+.timeline-title{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rl3-accent);margin-bottom:40px;text-align:center}
+.timeline-grid{position:relative;display:grid;grid-template-columns:repeat(9,1fr);gap:0}
+.timeline-track{position:absolute;top:28px;left:5%;right:5%;height:2px;background:var(--rl3-mid-gray)}
+.timeline-track-fill{height:100%;background:linear-gradient(90deg,var(--rl3-accent),var(--rl3-accent));width:0%;transition:width 1s ease}
+.tl-node{display:flex;flex-direction:column;align-items:center;cursor:pointer;position:relative;z-index:2;padding:0 4px}
+.tl-dot{width:16px;height:16px;border:2px solid var(--rl3-mid-gray);background:var(--rl3-black);transition:all .3s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:7px;color:var(--rl3-gray)}
+.tl-node:hover .tl-dot{border-color:var(--rl3-accent);background:var(--rl3-accent-dim);color:var(--rl3-accent)}
+.tl-node.active .tl-dot{border-color:var(--rl3-accent);background:var(--rl3-accent);color:var(--rl3-black)}
+.tl-node.past .tl-dot{border-color:var(--rl3-accent);background:var(--rl3-accent);color:var(--rl3-black);opacity:.5}
+.tl-sprint-num{font-family:'Space Mono',monospace;font-size:9px;color:var(--rl3-gray);margin-bottom:4px;letter-spacing:0.05em}
+.tl-node.active .tl-sprint-num{color:var(--rl3-accent)}
+.tl-sprint-name{font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--rl3-gray);text-align:center;line-height:1.3;max-width:100px;transition:color .2s}
+.tl-node:hover .tl-sprint-name{color:var(--rl3-white)}
+.tl-node.active .tl-sprint-name{color:var(--rl3-white);font-weight:600}
+.tl-weeks{font-family:'Space Mono',monospace;font-size:8px;color:var(--rl3-mid-gray);margin-top:4px}
+.tl-node.active .tl-weeks{color:var(--rl3-gray)}
+.tl-gate{margin-top:8px;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:0.1em;padding:2px 6px;border:1px solid rgba(200,184,138,.2);color:var(--rl3-accent);opacity:0;transition:opacity .2s}
+.tl-node:hover .tl-gate{opacity:1}
+.tl-node.critical .tl-gate{border-color:rgba(239,68,68,.3);color:#ef4444;opacity:1}
 
 /* ====== SCREEN CARDS ====== */
 .screens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:20px;opacity:0;transform:translateY(30px);transition:all .8s .3s cubic-bezier(.16,1,.3,1)}
@@ -261,7 +303,7 @@ body{font-family:'Instrument Sans',system-ui,sans-serif;background:#0a0a0b;color
   <p class="hero-sub">Each sprint delivers visible value. Each Decision Gate validates direction. Observe, act, iterate until the platform is operational.</p>
   <div class="hero-cta">
     <button class="btn btn-primary" onclick="goToSprint(1)">Start the journey &#8594;</button>
-    <button class="btn btn-ghost" onclick="goToSprint(1)">View timeline</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('timelineSection').scrollIntoView({behavior:'smooth'})">View timeline</button>
   </div>
   <div class="scroll-line"></div>
 </section>
@@ -293,6 +335,28 @@ body{font-family:'Instrument Sans',system-ui,sans-serif;background:#0a0a0b;color
     </div>
   </div>
 </div>
+
+<!-- STORY POPUP -->
+<div class="story-popup" id="storyPopup">
+  <div class="story-popup-header"><span class="story-popup-id" id="spId"></span><button class="story-popup-close" onclick="closeStoryPopup()">&times;</button></div>
+  <div class="story-popup-body">
+    <div class="story-popup-title" id="spTitle"></div>
+    <div class="story-popup-narrative" id="spNarrative"></div>
+    <div class="story-popup-criteria-title">Acceptance Criteria</div>
+    <ul class="story-popup-criteria" id="spCriteria"></ul>
+    <div class="story-popup-sprint" id="spSprint"></div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section" id="timelineSection">
+  <div class="timeline-container">
+    <div class="timeline-title">02 — Sprint Timeline</div>
+    <div class="timeline-grid" id="timelineGrid">
+      <div class="timeline-track"><div class="timeline-track-fill" id="tlFill"></div></div>
+    </div>
+  </div>
+</section>
 
 <!-- SPRINTS -->
 <div id="sprintsContainer"></div>
@@ -332,7 +396,7 @@ SPRINTS.forEach(s=>{
     <div class="sprint-header" data-anim><div class="sprint-label">0${s.id} — Sprint ${s.id} / Weeks ${s.weeks}</div>
     <h2 class="sprint-milestone">&ldquo;${s.milestone}&rdquo;</h2>
     <p class="sprint-desc">${s.desc}</p></div>
-    <div class="stories-bar" data-anim>${s.stories.map(st=>`<span class="story-tag">${st}</span>`).join('')}</div>
+    <div class="stories-bar" data-anim>${s.stories.map(st=>`<span class="story-tag" onclick="event.stopPropagation();showStory('${st}',this)">${st}</span>`).join('')}</div>
     <div class="screens-grid" data-anim>${s.screens.map((sc,si)=>`<div class="screen-card" onclick="openDetail(${s.id-1},${si})"><div class="screen-card-header">${sc.name}</div><div class="screen-card-body">${sc.html}</div></div>`).join('')}</div>
     <div class="tracks-row" data-anim>
       <span class="track-chip track-a"><span class="track-dot"></span>A: ${s.tracks.a}</span>
@@ -379,8 +443,106 @@ document.querySelectorAll('[data-anim]').forEach(el=>obs.observe(el));
 const nav=document.getElementById('timelineNav');
 new IntersectionObserver(([e])=>{nav.classList.toggle('visible',!e.isIntersecting)},{threshold:0}).observe(document.getElementById('hero'));
 const navItems=document.querySelectorAll('.tn-item');
-document.querySelectorAll('.sprint-section').forEach(s=>{new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const num=x.target.id.replace('sprint-','');navItems.forEach(n=>{n.classList.remove('active');if(n.dataset.sprint===num)n.classList.add('active');if(parseInt(n.dataset.sprint)<parseInt(num))n.classList.add('completed');else n.classList.remove('completed')})}})},{threshold:.3}).observe(s)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();return}if(document.getElementById('detailPanel').classList.contains('open'))return;const a=document.querySelector('.tn-item.active');const n=a?parseInt(a.dataset.sprint):0;if((e.key==='ArrowRight'||e.key==='ArrowDown')&&n<9)goToSprint(n+1);if((e.key==='ArrowLeft'||e.key==='ArrowUp')&&n>1)goToSprint(n-1)});
+document.querySelectorAll('.sprint-section').forEach(s=>{new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const num=x.target.id.replace('sprint-','');navItems.forEach(n=>{n.classList.remove('active');if(n.dataset.sprint===num)n.classList.add('active');if(parseInt(n.dataset.sprint)<parseInt(num))n.classList.add('completed');else n.classList.remove('completed')});updateTimeline(parseInt(num))}})},{threshold:.3}).observe(s)});
+/* ======== US_STORIES DATA ======== */
+const US_STORIES={
+'US-1.1':{t:'User Authentication with MFA',r:'platform user',w:'log in securely with email/password and MFA',s:'my account is protected against unauthorized access',c:['Login with email + password','MFA required for all users (TOTP)','Session management with configurable timeout','Password reset flow','Failed login lockout after N attempts','Audit log entry for every auth event'],sp:1},
+'US-1.2':{t:'Role-Based Access Control (RBAC)',r:'Master Admin',w:'assign roles to users with granular permissions per bounded context',s:'each team member only accesses what they need',c:['Roles: Master Admin, CO/MLRO, Analyst, Operations, Viewer','Permissions configurable per bounded context','Master Admins have full platform access','Analysts can create/edit but cannot approve','Viewer role is read-only'],sp:2},
+'US-1.3':{t:'Multi-Tenant Firm Isolation',r:'compliance consultancy',w:'each client firm to be completely isolated',s:'data from one firm is never visible to another',c:['Every record carries TenantId','Row-level security at database level','Users assigned to one or more tenants','Cross-tenant queries impossible','Tenant config: regulators, thresholds, SLAs'],sp:1},
+'US-1.4':{t:'Immutable Audit Trail',r:'compliance officer',w:'every action logged immutably',s:'regulators can inspect a tamper-proof history',c:['Append-only storage (no update, no delete)','Actor, timestamp, action, object_id, before/after','Agent actions labeled with agent identity','Exportable as CSV/PDF with filters','Retention: minimum 6 years'],sp:2},
+'US-2.1':{t:'Client Lifecycle Management',r:'team member',w:'manage clients through defined lifecycle states',s:"every client's status is clear and transitions are controlled",c:['States: PROSPECT > ONBOARDING > ACTIVE > UNDER_REVIEW > SUSPENDED > EXITED','Transition rules enforced','Authorized role required','Every transition audit-logged','Dashboard count per state'],sp:2},
+'US-2.2':{t:'Client Record CRUD',r:'team member',w:'create and manage client records',s:'all client information is centralized',c:['Types: Individual, Corporate, Fund, Foundation, Fintech/VASP','Required: name, type, jurisdiction, contact, engagement date','Search by name, ID, type, jurisdiction, status, risk tier','Bulk export capability'],sp:2},
+'US-2.3':{t:'UBO Management',r:'compliance analyst',w:'manage Ultimate Beneficial Owners as shared entities',s:'a person who is UBO of multiple clients is tracked once',c:['UBO as shared Person entity','Configurable ownership threshold (25% or 10%)','Mandatory: name, nationality, DOB, passport, ownership %','PEP flag auto-triggers risk tier HIGH minimum','Re-verification: annually (6mo for HIGH/VERY_HIGH)'],sp:2},
+'US-2.4':{t:'Client Document Management',r:'operations staff',w:'upload, version, and track documents per client',s:'all evidence is centralized with complete history',c:['Upload PDF, DOCX, XLSX, images','Full version history retained','Expiry date tracking for identity docs','Automated alerts: 60/30/7 days before expiry','Move to UNDER_REVIEW if expired'],sp:2},
+'US-2.5':{t:'Corporate Ownership Structure',r:'compliance analyst',w:'model nested corporate ownership chains',s:'I can trace beneficial ownership to natural persons',c:['Entity can own entity (parent reference)','Nested depth up to 10+ layers','Visual ownership diagram generation','Must reach ultimate natural persons with % holdings'],sp:2},
+'US-2.6':{t:'Client Search & Filtering',r:'team member',w:'search and filter clients across multiple dimensions',s:'I can quickly find who I need',c:['Search by name, ID, type, jurisdiction, risk, status','Filter combinations (AND logic)','Sortable columns, pagination','Quick filters for common views'],sp:2},
+'US-2.8':{t:'Identity Document Expiry Monitoring',r:'compliance officer',w:'automated alerts when identity documents are expiring',s:'no client file goes stale',c:['Alerts at 60, 30, 7 days before expiry','Auto-transition to UNDER_REVIEW if expired','Escalation for high-risk clients','Dashboard widget: upcoming expirations'],sp:8},
+'US-3.1':{t:'Onboarding Case Lifecycle',r:'team member',w:'manage onboarding through defined stages',s:'no step is missed and every decision is documented',c:['Stages: Intake > Screening > Risk Scoring > DD > File Completion > Approval','Entry/exit criteria enforced per stage','SLA: 5-10 business days, flag overdue at 10','Stage skipping for low-risk repeat clients'],sp:3},
+'US-3.2':{t:'Client Intake & Document Requests',r:'analyst',w:'initiate structured intake with automatic document requests',s:'I collect everything needed upfront',c:['Structured intake form per client type','Auto-generate document checklist by type + jurisdiction','Smart reminders for missing documents','Corporate: trade licence, MoA, share register, etc.','Individual: passport (mandatory), Emirates ID, visa'],sp:3},
+'US-3.3':{t:'Risk Scoring Engine',r:'compliance officer',w:'algorithmic risk scoring based on our existing matrix',s:'every client gets a consistent, documented risk rating',c:['Factors: jurisdiction, product, structure, PEP, adverse media, sector','Output: Low / Medium / High / Unacceptable','Different models per ClientType','AI agent drafts score, human confirms','Recalculate on: onboarding, periodic review, ownership change'],sp:4},
+'US-3.4':{t:'Screening Hub',r:'analyst',w:'run and manage screening checks from a unified console',s:'all screening results are in one place',c:['Phase 1: manual CSV upload','Mandatory: UAE, UN, HMT, OFAC, EU + PEP + Adverse media','Match threshold >=85% triggers human review','Unified results view per client/person'],sp:4},
+'US-3.5':{t:'Screening Hit Management',r:'analyst',w:'triage screening hits, document false positives, and escalate true matches',s:'every hit is properly handled',c:['Dispositions: FALSE_POSITIVE, TRUE_MATCH, PENDING','False positive: 3-5 sentence rationale + CO/MLRO sign-off','Sanctions hits: founder sign-off required','True match: stop onboarding, same-day escalation'],sp:4},
+'US-3.6':{t:'Due Diligence Workflow',r:'analyst',w:'execute CDD/EDD workflows with structured checklists',s:'due diligence is complete and consistent',c:['Standard CDD for MEDIUM risk','Enhanced DD for HIGH/VERY_HIGH','Document checklist auto-generated per risk tier','Track completion per checklist item'],sp:5},
+'US-3.7':{t:'Source of Wealth/Funds Documentation',r:'analyst',w:'capture and analyze SoW/SoF evidence',s:'the origin of client funds is documented',c:['Minimum: narrative + supporting evidence','Requirements vary by client type and risk tier','Gap analysis and follow-up suggestions'],sp:5},
+'US-3.8':{t:'Onboarding Approval Workflow',r:'compliance officer',w:'risk-tiered approval routing',s:'high-risk clients get appropriate sign-off',c:['Low/Medium: CO or MLRO approves','High: requires director sign-off','Approval logged with approver + timestamp','Rejection returns to appropriate stage'],sp:5},
+'US-3.9':{t:'Re-Screening Calendar',r:'MLRO',w:'daily automated re-screening',s:'existing clients are continuously monitored',c:['Daily screening runs automatically','All active clients covered','New hits flagged and routed to analysts','Dashboard: re-screening status + pending hits'],sp:8},
+'US-3.10':{t:'Risk Score Override',r:'compliance officer',w:'override a machine-generated risk score with documented rationale',s:'professional judgment can adjust algorithmic outputs',c:['Override by onboarding team with CO verification','HIGH+ overrides: dual sign-off + rationale','Override flag and rationale stored','Audit trail: original score, new score, rationale'],sp:5},
+'US-3.11':{t:'Professional Client Assessment',r:'compliance officer',w:'assess professional client status for regulated clients',s:'classification requirements are met',c:['Professional client classification form (ADGM/DFSA)','Suitability assessment','Classification stored in client record','Market Counterparty notice generation'],sp:8},
+'US-3.13':{t:'Onboarding to Active Client Transition',r:'compliance officer',w:'a formal handoff when onboarding is approved',s:'the client transitions to ACTIVE with all required setup',c:['OnboardingApproved > Client.status = ACTIVE','Initial compliance registers created','Re-screening schedule activated','Assigned team notified','All onboarding docs linked to client'],sp:5},
+'US-3.14':{t:'Risk Scoring Configuration',r:'admin',w:'configurable risk scoring factors and weights',s:'the scoring engine adapts when the CRA matrix is provided',c:['Pluggable risk factor architecture','Factor weights configurable per tenant','Score thresholds per tenant','Fallback to defaults if tenant-specific not set'],sp:4},
+'US-4.1':{t:'Policy Library',r:'compliance officer',w:'a version-controlled policy library',s:'all policies are centrally managed with full history',c:['Types: AML/CFT, Sanctions, CDD/EDD, Conflicts, Data Protection...','Version: major.minor','Full amendment history','Review triggers: regulatory change, annual, audit findings'],sp:6},
+'US-4.2':{t:'Policy Approval Workflow',r:'compliance officer',w:'structured approval workflows for policies',s:'every policy change goes through proper governance',c:['Draft > Internal Review > Approval > Publication','Review by CO/MLRO, approval by Board','Dual sign-off for core AML policy','AI agent can draft (human triggers transitions)'],sp:6},
+'US-4.3':{t:'Register Management',r:'compliance officer',w:'structured, searchable compliance registers',s:'all events are properly logged and retrievable',c:['18 register types: Breach, Complaints, Gifts, Conflicts, SAR...','Mandatory fields per type','Auto-update from case events','Export CSV/PDF','reg_submission flag for regulatory registers'],sp:6},
+'US-4.4':{t:'Incident & Breach Management',r:'compliance officer',w:'structured incident workflows with escalation',s:'breaches are captured, assessed, and remediated consistently',c:['Capture > Assess > Remediate > Close','Severity: Low, Medium, High, Critical','CRITICAL: notification decision before close','Regulatory notification SLA: 24-72 hours','Re-open if new facts arise'],sp:6},
+'US-4.5':{t:'Training Management',r:'compliance officer',w:'track training plans, attendance, and attestations',s:'regulatory training requirements are demonstrably met',c:['Records: type, completion date, attestation, score, next due','Automated reminders for upcoming training','Training register with search and export'],sp:6},
+'US-5.1':{t:'Regulatory Radar (Basic Weekly Scan)',r:'compliance officer',w:'automated weekly scans of regulatory sources',s:'no relevant change goes unnoticed',c:['Sources: DFSA, FSRA, UAE CB, VARA, DIFC, ADGM','International: FATF updates, sanctions list updates','Weekly schedule + ad-hoc manual scan','Manual approval before publication'],sp:7},
+'US-9.1':{t:'Template Management',r:'admin',w:'manage document templates',s:'all generated documents follow current standards',c:['Types: DD checklist, risk matrix, engagement letter...','DOCX/PPTX templates with merge fields','Version control','Admin-only updates'],sp:5},
+'US-9.2':{t:'Document Auto-Population',r:'team member',w:'documents auto-filled from platform data',s:"there's zero manual re-entry",c:['Merge fields from client, entity, case, user data','Preview before generation','Output: DOCX (editable), PDF (final), PPTX'],sp:5},
+'US-9.3':{t:'Document Versioning & Retention',r:'compliance officer',w:'full document lifecycle management',s:'regulatory retention requirements are met',c:['All versions retained','Minimum 6-year retention','Archive option','Delete only after 6 years'],sp:5},
+'US-10.1':{t:'Task Management',r:'team member',w:'assigned tasks with deadlines',s:'I know what I need to do and when',c:['Tasks linked to cases, entities, policies','Assignment to users with due dates and priority','Status: open, in_progress, completed, overdue','Team dashboard: "My Tasks"'],sp:3},
+'US-10.2':{t:'Approval Workflows',r:'team member',w:'configurable approval workflows with stage gates',s:'nothing progresses without proper sign-off',c:['Configurable per vertical/context','Single or dual approval','Routing by risk tier','Rejection with reason'],sp:3},
+'US-10.3':{t:'Reminder & Escalation Engine',r:'compliance officer',w:'automated reminders and escalations',s:'nothing falls through the cracks',c:['Configurable cadence: 60/30/14/7/1 days','Escalation: owner > manager > founder','Email delivery','Escalation logged in audit trail'],sp:4},
+'US-10.4':{t:'SLA Tracking',r:'founder',w:'SLA tracking across all workflows',s:'I can identify bottlenecks',c:['SLAs configurable per workflow type','Dashboard: SLA compliance %','Overdue items highlighted','Historical SLA performance'],sp:8},
+'US-11.1':{t:'Agent Autonomy Framework',r:'admin',w:'a consistent agent framework with human-in-the-loop',s:'AI assists but never acts without oversight',c:['All agent actions require human approval (Phase 1)','Agent actions labeled in audit trail','Accuracy metrics tracked','Outputs are "drafts" until confirmed'],sp:8},
+'US-11.2':{t:'Risk Scoring Agent',r:'analyst',w:'AI-drafted risk scores',s:'scoring is faster while maintaining human oversight',c:['Agent applies risk matrix algorithmically','Structured score with full rationale','Human reviews and confirms before persistence'],sp:8},
+'US-12.1':{t:'Founder Dashboard',r:'founder',w:'a strategic overview dashboard',s:'I see everything that needs my attention at a glance',c:['Open cases by type and stage','High-risk onboardings','Upcoming deadlines (all contexts)','Overdue actions and bottlenecks','KPI cards with trends'],sp:3},
+'US-12.2':{t:'Team Dashboard',r:'team member',w:'a personal task dashboard',s:'I can focus on my daily execution',c:['My assigned tasks','Upcoming deadlines','Pending approvals','Evidence needed','Case status updates'],sp:3},
+'US-12.4':{t:'Global Search',r:'team member',w:'to search across clients, cases, policies, entities, and documents',s:'I can find anything quickly',c:['Unified search bar','Results categorized by type','Recent searches','PostgreSQL full-text search'],sp:7},
+'US-13.1':{t:'Client Data Import',r:'admin',w:'import existing client records from Excel',s:'the platform starts with current data',c:['Import from Excel/CSV','Field mapping UI','Validation and error reporting','Dry-run mode before commit','~30 current clients + people/UBO records'],sp:8},
+'US-13.3':{t:'Template & Policy Import',r:'admin',w:'import existing templates and policies',s:'the document factory is ready from day one',c:['Import DOCX/XLSX/PPTX templates','Categorize and tag','Set initial version'],sp:8},
+'US-13.4':{t:'Parallel Run Support',r:'founder',w:'a 2-4 week parallel run',s:'we can verify the platform before full cutover',c:['New platform runs alongside old processes','Soft launch: founders + 1-2 support users','Export all data (rollback capability)','Feedback loop during first month','2 training sessions + quick-start SOPs'],sp:9},
+'US-14.1':{t:'Authorisation Case Tracking (Light)',r:'team member',w:'track regulatory applications through stages',s:'all active cases are visible in one place',c:['Create/edit authorisation case records','Track 9 stages: Engagement > ... > Approval','Kanban board view','Stage transition with audit trail','Basic notes and activity log'],sp:7},
+'US-14.2':{t:'Entity Register Tracking (Light)',r:'operations staff',w:'track all managed entities with key dates',s:'renewals and obligations are not missed',c:['Create/edit entity records (SPV, Foundation, Fund...)','Track: name, type, jurisdiction, registration, licence expiry','Directors and beneficial owners linked','Key dates with 60/30/14/7/1 day alerts','Traffic-light status'],sp:7},
+'US-14.3':{t:'Post-Licence Handoff (Light)',r:'compliance officer',w:'automatic setup when a licence is granted',s:'ongoing compliance infrastructure is created immediately',c:['When auth case reaches APPROVED, trigger handoff','Create: calendar entries, register entries, training plan','Create tasks: governance, policy finalization, regulatory returns','Handoff tracked and auditable'],sp:7}
+};
+
+/* ======== TIMELINE GRID ======== */
+const tlGrid=document.getElementById('timelineGrid');
+const tlMilestones=['Log in &\nSee the app','See &\nManage clients','Start\nOnboarding','Screen &\nScore risk','Complete\nE2E','Compliance\nOperations','Track\nEverything','System runs\nAutonomously','Ready to\nGo Live'];
+SPRINTS.forEach((s,i)=>{
+  const node=document.createElement('div');
+  node.className='tl-node'+(i===0?' active':'')+(s.gateCritical?' critical':'');
+  node.onclick=()=>goToSprint(s.id);
+  node.innerHTML=`<div class="tl-dot">${String(s.id).padStart(2,'0')}</div><div class="tl-sprint-num">S${s.id}</div><div class="tl-sprint-name">${tlMilestones[i].replace('\n','<br>')}</div><div class="tl-weeks">W${s.weeks}</div>${s.gateCritical?'<div class="tl-gate">CRITICAL</div>':s.gateFinal?'<div class="tl-gate" style="opacity:1">FINAL</div>':'<div class="tl-gate">GATE</div>'}`;
+  tlGrid.appendChild(node);
+});
+
+/* ======== STORY POPUP ======== */
+function showStory(id,el){
+  const s=US_STORIES[id];
+  if(!s)return;
+  const popup=document.getElementById('storyPopup');
+  document.getElementById('spId').textContent=id;
+  document.getElementById('spTitle').textContent=s.t;
+  document.getElementById('spNarrative').innerHTML=`<strong>As a</strong> ${s.r} <strong>I want</strong> ${s.w} <strong>so that</strong> ${s.s}.`;
+  document.getElementById('spCriteria').innerHTML=s.c.map(c=>`<li>${c}</li>`).join('');
+  document.getElementById('spSprint').innerHTML=`Delivered in <span>Sprint ${s.sp}</span>`;
+  const rect=el.getBoundingClientRect();
+  let top=rect.bottom+8;
+  let left=rect.left;
+  if(top+400>window.innerHeight) top=rect.top-400;
+  if(left+380>window.innerWidth) left=window.innerWidth-396;
+  if(left<8) left=8;
+  popup.style.top=Math.max(8,top)+'px';
+  popup.style.left=left+'px';
+  popup.classList.add('open');
+}
+function closeStoryPopup(){document.getElementById('storyPopup').classList.remove('open')}
+document.addEventListener('click',e=>{if(!e.target.closest('.story-popup')&&!e.target.closest('.story-tag'))closeStoryPopup()});
+
+/* ======== UPDATE TIMELINE ON SCROLL ======== */
+const tlNodes=document.querySelectorAll('.tl-node');
+function updateTimeline(activeNum){
+  tlNodes.forEach((n,i)=>{
+    n.classList.remove('active','past');
+    if(i+1===activeNum) n.classList.add('active');
+    else if(i+1<activeNum) n.classList.add('past');
+  });
+  const fill=document.getElementById('tlFill');
+  if(fill) fill.style.width=((activeNum-1)/8*100)+'%';
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeStoryPopup();return}if(document.getElementById('detailPanel').classList.contains('open'))return;const a=document.querySelector('.tn-item.active');const n=a?parseInt(a.dataset.sprint):0;if((e.key==='ArrowRight'||e.key==='ArrowDown')&&n<9)goToSprint(n+1);if((e.key==='ArrowLeft'||e.key==='ArrowUp')&&n>1)goToSprint(n-1)});
 </script>
 </body>
 </html>
